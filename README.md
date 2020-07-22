@@ -1,6 +1,6 @@
 # SabreTools linux
 
-Some basic install scripts SabreTools on alpine/debian linux
+Run SabreTools on alpine linux (docker)
 
 There is an included (basic) docker container
 
