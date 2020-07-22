@@ -1,0 +1,13 @@
+#!/bin/bash
+
+
+BASEDIR=${2:-$(pwd)}
+CONTAINER=$(basename $BASEDIR)
+DOCKEROUT=${HOME}/dockerout/sabretools
+
+[ ! -d ${DOCKEROUT} ] && mkdir -p ${DOCKEROUT}
+
+docker run --rm -it \
+  -v ${DOCKEROUT}:/home/sabretools \
+  --name ${CONTAINER} \
+  ${CONTAINER}

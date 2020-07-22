@@ -1,0 +1,55 @@
+#!/bin/ash
+
+COREURL=https://download.visualstudio.microsoft.com/download/pr/6177874a-8b97-42b6-a348-e57ab402db28/5583af6be03e7d75de7cd610f9d9edc3/dotnet-sdk-3.1.302-linux-musl-x64.tar.gz
+CORELFILE=/tmp/cored.tar.gz
+CORELOCAL=/opt/dotnet
+SABREVER=1.0.1
+#BROKEN !!!  SABREURL=https://github.com/SabreTools/SabreTools/releases/download/${SABREVER}/SabreTools.v${SABREVER}.x86-64_netcoreapp3.1.zip
+SABREURL=https://ci.appveyor.com/api/buildjobs/d55ptbu3u2g9h950/artifacts/sabretools_Debug-x64.zip
+SABRELFILE=/tmp/sabre.zip
+SABRELOCAL=/opt/sabretools
+RUNAS=sabretools
+ISNIGHTLY=1
+
+### DEPENDANCIES
+#
+# CORE
+#
+# -- Download
+[ ! -f ${CORELFILE} ] && wget -qO ${CORELFILE} ${COREURL}
+[ ! -f ${CORELFILE} ] && /bin/echo "Sadness downloading CORE" && exit 1
+
+# -- Unpack
+[ ! -d ${CORELOCAL} ] && /bin/mkdir ${CORELOCAL} || echo "Missing ${CORELOCAL}"
+[ -f ${CORELFILE} ] && /bin/tar zxvf ${CORELFILE} -C ${CORELOCAL}
+
+### SABRETOOLS
+# -- Download
+[ ! -f ${SABRELFILE} ] && wget -qO ${SABRELFILE} ${SABREURL}
+[ $? -ne 0 ] && echo "Sadness getting Sabretools" && exit 1
+
+[ ! -d ${SABRELOCAL} ] && /bin/mkdir ${SABRELOCAL} || echo "Missing ${SABRELOCAL}"
+# -- Unpack
+if [ $ISNIGHTLY == 1 ]
+then
+  [ -f ${SABRELFILE} ] && /usr/bin/unzip -o ${SABRELFILE} -d /tmp/ || echo "Missing: ${SABRELFILE}"
+  mv /tmp/SabreTools/bin/Debug/netcoreapp3.1/* ${SABRELOCAL}/
+else
+  [ -f ${SABRELFILE} ] && /usr/bin/unzip -o ${SABRELFILE} -d ${SABRELOCAL} || echo "Missing: ${SABRELFILE}"
+fi
+
+# -- create sabretools exec
+cat << EOST > /usr/local/bin/sabretools
+#!/bin/ash
+PATH=${PATH}:${CORELOCAL}:${SABRELOCAL}
+DOTNET_ROOT=${CORELOCAL}
+dotnet ${SABRELOCAL}/SabreTools.dll $*
+EOST
+
+# -- Perms
+chmod +x /usr/local/bin/sabretools
+chown -R ${RUNAS}:${RUNAS} ${SABRELOCAL}
+
+### CLEANUP
+rm -f ${CORELFILE} ${SABRELFILE}
+
