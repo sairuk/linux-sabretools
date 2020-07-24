@@ -9,6 +9,7 @@ RUN    apk add --no-cache --virtual=.build-dependencies ca-certificates \
     && apk add --no-cache libstdc++ \
     && apk add --no-cache libgcc \
     && apk add --no-cache unzip \
+    && apk add --no-cache p7zip \
     && apk del .build-dependencies
 
 RUN adduser --disabled-password --shell /bin/bash --uid ${UID} --home /home/${USER} ${USER}

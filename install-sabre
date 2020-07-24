@@ -39,11 +39,11 @@ else
 fi
 
 # -- create sabretools exec
-cat << EOST > /usr/local/bin/sabretools
+cat << 'EOST' > /usr/local/bin/sabretools
 #!/bin/ash
-PATH=${PATH}:${CORELOCAL}:${SABRELOCAL}
-DOTNET_ROOT=${CORELOCAL}
-dotnet ${SABRELOCAL}/SabreTools.dll $*
+PATH=${PATH}:/opt/dotnet:/opt/sabretools
+DOTNET_ROOT=/opt/dotnet
+dotnet /opt/sabretools/SabreTools.dll $*
 EOST
 
 # -- Perms
