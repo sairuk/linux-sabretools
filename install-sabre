@@ -3,7 +3,7 @@
 COREURL=https://download.visualstudio.microsoft.com/download/pr/6177874a-8b97-42b6-a348-e57ab402db28/5583af6be03e7d75de7cd610f9d9edc3/dotnet-sdk-3.1.302-linux-musl-x64.tar.gz
 CORELFILE=/tmp/cored.tar.gz
 CORELOCAL=/opt/dotnet
-SABREVER=1.0.4
+SABREVER=1.1.2
 SABREURL=https://github.com/SabreTools/SabreTools/releases/download/${SABREVER}/SabreTools.v${SABREVER}.x86-64_netcoreapp3.1.zip
 #SABREURL=https://ci.appveyor.com/api/buildjobs/d55ptbu3u2g9h950/artifacts/sabretools_Debug-x64.zip
 SABRELFILE=/tmp/sabre.zip
